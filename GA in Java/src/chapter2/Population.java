@@ -1,8 +1,9 @@
 package chapter2;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Random;
+import java.util.List;
 
 
 /**
@@ -15,7 +16,7 @@ import java.util.Random;
  *
  */
 public class Population {
-	private Individual population[];
+	private List<Individual> population = new ArrayList<>();
 	private double populationFitness = -1;
 
 	/**
@@ -25,8 +26,6 @@ public class Population {
 	 *            The number of individuals in the population
 	 */
 	public Population(int populationSize) {
-		// Initial population
-		this.population = new Individual[populationSize];
 	}
 
 	/**
@@ -38,16 +37,13 @@ public class Population {
 	 *            The size of each individual's chromosome
 	 */
 	public Population(int populationSize, int chromosomeLength) {
-		// Initialize the population as an array of individuals
-		this.population = new Individual[populationSize];
-
 		// Create each individual in turn
 		for (int individualCount = 0; individualCount < populationSize; individualCount++) {
 			// Create an individual, initializing its chromosome to the given
 			// length
 			Individual individual = new Individual(chromosomeLength);
 			// Add individual to population
-			this.population[individualCount] = individual;
+			this.population.add( individual );
 		}
 	}
 
@@ -57,7 +53,7 @@ public class Population {
 	 * @return individuals Individuals in population
 	 */
 	public Individual[] getIndividuals() {
-		return this.population;
+		return (Individual[]) this.population.toArray();
 	}
 
 	/**
@@ -76,7 +72,7 @@ public class Population {
 	 */
 	public Individual getFittest(int offset) {
 		// Order population by fitness
-		Arrays.sort(this.population, new Comparator<Individual>() {
+		Collections.sort(this.population, new Comparator<Individual>() {
 			@Override
 			public int compare(Individual o1, Individual o2) {
 				if (o1.getFitness() > o2.getFitness()) {
@@ -89,7 +85,7 @@ public class Population {
 		});
 
 		// Return the fittest individual
-		return this.population[offset];
+		return this.population.get(offset);
 	}
 
 	/**
@@ -117,7 +113,7 @@ public class Population {
 	 * @return size The population's size
 	 */
 	public int size() {
-		return this.population.length;
+		return this.population.size();
 	}
 
 	/**
@@ -128,7 +124,8 @@ public class Population {
 	 * @return individual
 	 */
 	public Individual setIndividual(int offset, Individual individual) {
-		return population[offset] = individual;
+	    population.set(offset, individual);
+		return individual;
 	}
 
 	/**
@@ -138,7 +135,7 @@ public class Population {
 	 * @return individual
 	 */
 	public Individual getIndividual(int offset) {
-		return population[offset];
+		return population.get(offset);
 	}
 	
 	/**
@@ -148,12 +145,6 @@ public class Population {
 	 * @return void
 	 */
 	public void shuffle() {
-		Random rnd = new Random();
-		for (int i = population.length - 1; i > 0; i--) {
-			int index = rnd.nextInt(i + 1);
-			Individual a = population[index];
-			population[index] = population[i];
-			population[i] = a;
-		}
+	    Collections.shuffle(population);
 	}
 }
